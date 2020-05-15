@@ -454,6 +454,16 @@ end
         end
     end
     close(reader)
+
+    reader = EzXML.StreamReader(IOBuffer("<a><empty/></a>"))
+    for typ in reader
+        if typ == EzXML.READER_ELEMENT && EzXML.nodename(reader) == "a"
+            @test !EzXML.isnodeempty(reader)
+        elseif typ == EzXML.READER_ELEMENT && EzXML.nodename(reader) == "b"
+            @test EzXML.isnodeempty(reader)
+        end
+    end
+
     @test true
 
     # TODO: Activate this test.

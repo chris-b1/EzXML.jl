@@ -258,6 +258,22 @@ function nodename(reader::StreamReader)
 end
 
 """
+    isnodeempty(reader::StreamReader)
+
+Is the current node of `reader` and empty element
+"""
+function isnodeempty(reader::StreamReader)
+    r = ccall(
+        (:xmlTextReaderIsEmptyElement, libxml2),
+        Cint,
+        (Ptr{Cvoid},),
+        getfield(reader, :ptr)
+    )
+    @assert r != -1 "XML error"
+    return r == 1
+end
+
+"""
     hasnodecontent(reader::StreamReader)
 
 Return if the current node of `reader` has content.
